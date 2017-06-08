@@ -32,12 +32,15 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HikeFragment extends android.app.Fragment {
+public class HikeFragment extends android.support.v4.app.Fragment {
 
     private Spinner _difficulty_spinner;
+    private Spinner _district_spinner;
     private Spinner _hike_type_spinner;
     private Spinner _quality_spinner;
     private Spinner _price_spinner;
+    private static String _start_date_hike;
+    private static String _rout_hike;
 
 
     public HikeFragment() {
@@ -46,12 +49,10 @@ public class HikeFragment extends android.app.Fragment {
 
     }
 
-    MapView mMapView;
-    private GoogleMap googleMap;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hike, container, false);
+        _district_spinner = (Spinner) rootView.findViewById(R.id.spinner_district);
         _difficulty_spinner = (Spinner) rootView.findViewById(R.id.spinner_difficulty);
         _hike_type_spinner = (Spinner) rootView.findViewById(R.id.spinner_hike_type);
         _quality_spinner = (Spinner) rootView.findViewById(R.id.spinner_quality);
@@ -59,33 +60,6 @@ public class HikeFragment extends android.app.Fragment {
 
         initSpinners();
 
-        mMapView = (MapView) rootView.findViewById(R.id.Mapau);
-        mMapView.onCreate(savedInstanceState);
-
-        mMapView.onResume(); // needed to get the map to display immediately
-
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                //googleMap.setMyLocationEnabled(true);
-
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-        });
 
         return rootView;
     }
@@ -116,35 +90,15 @@ public class HikeFragment extends android.app.Fragment {
         Retrofit retrofit = APIClient.getClient();
         UserAPI apiService = retrofit.create(UserAPI.class);
 
+        callSpinner(apiService.getDistricts(), _district_spinner);
         callSpinner(apiService.getDifficulties(), _difficulty_spinner);
         callSpinner(apiService.getHikeTypes(), _hike_type_spinner);
         callSpinner(apiService.getQualities(), _quality_spinner);
         callSpinner(apiService.getPrices(), _price_spinner);
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
+    public static void setStartDate(String date){
+        _start_date_hike = date;
     }
 
 }

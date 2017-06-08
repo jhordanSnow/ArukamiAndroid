@@ -27,6 +27,9 @@ public interface UserAPI {
     @GET("Catalog/Nationalities")
     Call<List<SpinnerResponse>> getNationalities();
 
+    @GET("Catalog/Districts")
+    Call<List<SpinnerResponse>> getDistricts();
+
     @GET("Catalog/Difficulties")
     Call<List<SpinnerResponse>> getDifficulties();
 

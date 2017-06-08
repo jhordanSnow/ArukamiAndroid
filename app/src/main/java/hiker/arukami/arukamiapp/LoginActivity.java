@@ -275,6 +275,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             } catch (IOException e) {
                 e.printStackTrace();
+                response.setSuccess(false);
+                response.setMessage("No internet Connection");
             }
 
 
@@ -289,7 +291,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (response.isSuccess()){
                 return true;
             }
-            Toast.makeText(getBaseContext(),response.getMessage(),Toast.LENGTH_LONG).show();
             return false;
         }
 

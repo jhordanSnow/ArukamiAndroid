@@ -1,152 +1,246 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20px"
     tools:context="hiker.arukami.arukamiapp.HikeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
-
-        <EditText
-            android:id="@+id/editText3"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/hike_name" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <TextView
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.93"
-                android:hint="@string/difficulty" />
-
-            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
+                android:text="@string/hike_name" />
 
-                <Spinner
-                    android:id="@+id/spinner_difficulty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.03" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.93"
-                android:hint="@string/type" />
-
-            <android.support.design.widget.TextInputLayout
+            <EditText
+                android:id="@+id/editText3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
+                android:ems="10"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:inputType="textPersonName"/>
 
-                <Spinner
-                    android:id="@+id/spinner_hike_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.05" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerHorizontal" />
 
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.93"
-                android:hint="@string/quality" />
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical">
 
-                <Spinner
-                    android:id="@+id/spinner_quality"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.05" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+                    android:layout_weight="0.93"
+                    android:hint="@string/district" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
 
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                    <Spinner
+                        android:id="@+id/spinner_district"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.03" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.93"
-                android:hint="@string/price" />
 
-            <android.support.design.widget.TextInputLayout
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerHorizontal" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical">
 
-                <Spinner
-                    android:id="@+id/spinner_price"
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.93"
+                    android:hint="@string/difficulty" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.03" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerHorizontal" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.93"
+                    android:hint="@string/type" />
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.05" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_hike_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.05" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerHorizontal" />
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.93"
+                    android:hint="@string/quality" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_quality"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.05" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerHorizontal" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.93"
+                    android:hint="@string/price" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.05" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerHorizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.93"
+                    android:hint="@string/start_date" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
+
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/start_date_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.93" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerHorizontal" />
+
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/Mapau"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-
+    </ScrollView>
 </FrameLayout>

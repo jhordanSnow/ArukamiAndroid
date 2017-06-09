@@ -1,16 +1,13 @@
 package hiker.arukami.arukamiapp;
 
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +17,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import hiker.arukami.arukamiapp.API.APIClient;
 import hiker.arukami.arukamiapp.API.UserAPI;
-import hiker.arukami.arukamiapp.HikeFragment;
-import hiker.arukami.arukamiapp.HikeMapFragment;
 import hiker.arukami.arukamiapp.Models.HikePointRequest;
 import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
-import hiker.arukami.arukamiapp.Models.JsonResponse;
-import hiker.arukami.arukamiapp.Models.LoginRequest;
-import hiker.arukami.arukamiapp.Models.LoginResponse;
-import hiker.arukami.arukamiapp.R;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
@@ -67,32 +57,19 @@ public class MainHikeFragment extends Fragment {
     }
 
     public HikeRequest getHike() {
-        ArrayList<LatLng> points = hikeMap.getPoints();
-        if (points.size() > 1) {
-            hike = hikeGeneral.getHike();
-            insertPoint(points.get(0).latitude, points.get(0).longitude, true);
-            insertPoint(points.get(points.size() - 1).latitude, points.get(points.size() - 1).longitude, false);
-            hike.setRoute(hikeMap.encodePath());
-            return hike;
+        InsertPointCall pointTask = new InsertPointCall();
+        try {
+            pointTask.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return null;
-    }
 
-    public void insertPoint(double latitude, double longitude, boolean start) {
-        HikePointRequest point = new HikePointRequest();
-        point.setLatitude(String.valueOf(latitude));
-        point.setLongitude(String.valueOf(longitude));
-        PointTask pointTask = new PointTask(point);
-        pointTask.execute((Void) null);
+        hike.setRoute(hikeMap.encodePath());
+        return hike;
 
     }
-
-    public int setCaca(int id) {
-        Log.wtf("adios",String.valueOf(id));
-
-        return id;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -197,70 +174,46 @@ public class MainHikeFragment extends Fragment {
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class PointTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String Latitude;
-        private final String Longitude;
-        public int id;
+        private class InsertPointCall extends AsyncTask<Call, Void, HikeRequest> {
 
-        PointTask(HikePointRequest point) {
-            Latitude = point.getLatitude();
-            Longitude = point.getLongitude();
-        }
+        private HikePointRequest startPoint;
+        private HikePointRequest endPoint;
 
-        public int getId() {
-            return id;
+        @Override
+        protected void onPreExecute() {
+            ArrayList<LatLng> points = hikeMap.getPoints();
+            if (points.size() > 1) {
+                hike = hikeGeneral.getHike();
+                startPoint = new HikePointRequest(String.valueOf(points.get(0).latitude), String.valueOf(points.get(0).longitude));
+                endPoint = new HikePointRequest(String.valueOf(points.get(points.size()-1).latitude), String.valueOf(points.get(points.size()-1).longitude));
+
+            }
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-
+        protected HikeRequest doInBackground(Call... params) {
             Retrofit retrofit = APIClient.getClient();
             UserAPI apiService = retrofit.create(UserAPI.class);
-            HikePointRespond pointResponse = new HikePointRespond();
-            HikePointRequest point = new HikePointRequest();
-            point.setLatitude(String.valueOf(Latitude));
-            point.setLongitude(String.valueOf(Longitude));
-            Call<HikePointRespond> result = apiService.addGeoPoint(point);
+            HikePointRespond startPointResponse = new HikePointRespond();
+            HikePointRespond endPointResponse  = new HikePointRespond();
+            Call<HikePointRespond> startPointResult = apiService.addGeoPoint(startPoint);
+            Call<HikePointRespond> endPointResult = apiService.addGeoPoint(endPoint);
             try {
-                Log.wtf("hola", "caca");
-                pointResponse = result.execute().body();
-                Log.wtf("afuera", String.valueOf(pointResponse.getIdPoint()));
+                startPointResponse = startPointResult.execute().body();
+                endPointResponse = endPointResult.execute().body();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Log.wtf("afuera", String.valueOf(pointResponse.getIdPoint()));
-
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            // TODO: register the new account here.
-            if (pointResponse.isSuccess()) {
-                id = pointResponse.getIdPoint();
-                Log.wtf("value", String.valueOf(id));
-                return true;
-            }
-            return false;
+            hike.setStartPoint(startPointResponse.getIdPoint());
+            hike.setEndPoint(endPointResponse.getIdPoint());
+            return hike;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            setCaca(id);
-        }
-
-        @Override
-        protected void onCancelled() {
-
+        protected void onPostExecute(HikeRequest result) {
         }
     }
 }

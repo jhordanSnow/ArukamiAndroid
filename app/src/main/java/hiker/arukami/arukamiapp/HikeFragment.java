@@ -3,22 +3,12 @@ package hiker.arukami.arukamiapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -44,6 +34,7 @@ public class HikeFragment extends android.support.v4.app.Fragment {
     private Spinner _price_spinner;
     private TextView _text_hike_name;
     private static String _start_date_hike;
+    private static String _end_date_hike;
     private static String _rout_hike;
 
 
@@ -92,14 +83,13 @@ public class HikeFragment extends android.support.v4.app.Fragment {
 
     public HikeRequest getHike(){
         HikeRequest hike = new HikeRequest();
-        hike.setName(String.valueOf(_text_hike_name.getText()));
+        hike.setName(_text_hike_name.getText().toString());
         hike.setDistrict(((SpinnerResponse) _district_spinner.getSelectedItem()).getValue());
         hike.setDifficulty(((SpinnerResponse) _difficulty_spinner.getSelectedItem()).getValue());
         hike.setHikeType(((SpinnerResponse) _hike_type_spinner.getSelectedItem()).getValue());
         hike.setQualityLevel(((SpinnerResponse) _quality_spinner.getSelectedItem()).getValue());
         hike.setPriceLevel(((SpinnerResponse) _price_spinner.getSelectedItem()).getValue());
         hike.setStartDate(_start_date_hike);
-        hike.setStartDate(MainActivity.getDateTime());
         return hike;
     }
 
@@ -115,6 +105,10 @@ public class HikeFragment extends android.support.v4.app.Fragment {
     }
 
     public static void setStartDate(String date){
+        _start_date_hike = date;
+    }
+
+    public static void setEndDate(String date){
         _start_date_hike = date;
     }
 

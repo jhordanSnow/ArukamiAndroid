@@ -12,6 +12,11 @@ public class HikePointRequest {
     @Expose
     private String longitude;
 
+    public HikePointRequest(String latitude, String longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public String getLatitude() {
         return latitude;
     }

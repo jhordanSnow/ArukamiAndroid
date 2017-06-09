@@ -1,13 +1,11 @@
 package hiker.arukami.arukamiapp;
 
-import android.icu.util.Calendar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,16 +13,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 
 import hiker.arukami.arukamiapp.API.APIClient;
 import hiker.arukami.arukamiapp.API.UserAPI;
-import hiker.arukami.arukamiapp.Models.HikePointRequest;
-import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
-import hiker.arukami.arukamiapp.Models.JsonResponse;
 import hiker.arukami.arukamiapp.Models.LoginResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = format.format(c.getTime());
 
-        HikeFragment.setStartDate(date);
-
         return date;
     }
 
     public void startHike(){
         TextView startHike = (TextView) findViewById(R.id.start_date_label);
-        startHike.setText(getDateTime());
+        String date = getDateTime();
+        startHike.setText(date);
+        HikeFragment.setStartDate(date);
 
         findViewById(R.id.StartHikeButton).setVisibility(View.GONE);
         findViewById(R.id.EndHikeButton).setVisibility(View.VISIBLE);
@@ -114,21 +107,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void endHike(){
+
         findViewById(R.id.StartHikeButton).setVisibility(View.VISIBLE);
         findViewById(R.id.EndHikeButton).setVisibility(View.GONE);
-
+        HikeFragment.setEndDate(getDateTime());
         LinearLayout tabStrip = ((LinearLayout)((TabLayout) findViewById(R.id.tabLayout)).getChildAt(0));
         walking = false;
 
         // Todo lo de guardar rikolinamente en la base de datos
 
         HikeRequest hike = hikeFragment.getHike();
+        hike.setEndDate(getDateTime());
         insertHike(hike);
 
         hikeFragment.resetHike();
     }
 
     public void insertHike(HikeRequest hike){
+
         Retrofit retrofit = APIClient.getClient();
         UserAPI apiService = retrofit.create(UserAPI.class);
         final LoginResponse hikeResponse = new LoginResponse();

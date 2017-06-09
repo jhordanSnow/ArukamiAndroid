@@ -36,5 +36,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.0.0'
     compile 'com.google.android.gms:play-services-location:11.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.github.florent37:camerafragment:1.0.7'
     testCompile 'junit:junit:4.12'
 }

@@ -2,6 +2,9 @@ package hiker.arukami.arukamiapp.API;
 
 import java.util.List;
 
+import hiker.arukami.arukamiapp.Models.HikePointRequest;
+import hiker.arukami.arukamiapp.Models.HikePointRespond;
+import hiker.arukami.arukamiapp.Models.HikeRequest;
 import hiker.arukami.arukamiapp.Models.JsonResponse;
 import hiker.arukami.arukamiapp.Models.LoginRequest;
 import hiker.arukami.arukamiapp.Models.LoginResponse;
@@ -42,4 +45,9 @@ public interface UserAPI {
     @GET("Catalog/Prices")
     Call<List<SpinnerResponse>> getPrices();
 
+    @POST("Hikes/GeoPoint/New/")
+    Call<HikePointRespond> addGeoPoint(@Body HikePointRequest point);
+
+    @POST("Hikes/New/")
+    Call<LoginResponse> addHike(@Body HikeRequest hike);
 }

@@ -172,10 +172,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
         new Handler().postDelayed(
                 new Runnable() {
                     public void run() {

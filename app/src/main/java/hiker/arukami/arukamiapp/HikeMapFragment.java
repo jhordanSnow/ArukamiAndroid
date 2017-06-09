@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -61,7 +62,7 @@ public class HikeMapFragment extends Fragment implements LocationListener {
     private PolylineOptions rectOptions;
     private LocationManager locationManager;
     private LatLng prev;
-    private static ArrayList<LatLng> points;
+    private ArrayList<LatLng> points;
 
 
     public HikeMapFragment() {
@@ -210,8 +211,12 @@ public class HikeMapFragment extends Fragment implements LocationListener {
         mMapView.onLowMemory();
     }
 
-    public static String encodePath(){
-        if (points.size() > 0){
+    public ArrayList<LatLng> getPoints(){
+        return points;
+    }
+
+    public String encodePath(){
+        if (points != null && points.size() > 0){
             return encode(points);
         }
         return "none";

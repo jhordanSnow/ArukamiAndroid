@@ -19,10 +19,22 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 
+import hiker.arukami.arukamiapp.API.APIClient;
+import hiker.arukami.arukamiapp.API.UserAPI;
+import hiker.arukami.arukamiapp.Models.HikePointRequest;
+import hiker.arukami.arukamiapp.Models.HikePointRespond;
+import hiker.arukami.arukamiapp.Models.HikeRequest;
+import hiker.arukami.arukamiapp.Models.JsonResponse;
+import hiker.arukami.arukamiapp.Models.LoginResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends AppCompatActivity {
     public MainHikeFragment hikeFragment = MainHikeFragment.getInstance();
     public static boolean walking = false;
-    private TabLayout tabLayout;
+    private static TabLayout tabLayout;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,7 +82,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.EndHikeButton).setVisibility(View.GONE);
     }
 
-    public String getDateTime(){
+    public void hideNavBar(){
+        findViewById(R.id.navigation).setVisibility(View.GONE);
+    }
+    public void showNavBar(){
+        findViewById(R.id.navigation).setVisibility(View.VISIBLE);
+    }
+
+
+    public static String getDateTime(){
         final java.util.Calendar c = java.util.Calendar.getInstance();
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -87,9 +107,9 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.StartHikeButton).setVisibility(View.GONE);
         findViewById(R.id.EndHikeButton).setVisibility(View.VISIBLE);
-
-        LinearLayout tabStrip = ((LinearLayout)((TabLayout) findViewById(R.id.tabLayout)).getChildAt(0));
-        tabStrip.getChildAt(2).setClickable(true);
+//
+//        LinearLayout tabStrip = ((LinearLayout)((TabLayout) findViewById(R.id.tabLayout)).getChildAt(0));
+//        tabStrip.getChildAt(2).setClickable(true);
         walking = true;
     }
 
@@ -98,15 +118,38 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.EndHikeButton).setVisibility(View.GONE);
 
         LinearLayout tabStrip = ((LinearLayout)((TabLayout) findViewById(R.id.tabLayout)).getChildAt(0));
-        tabStrip.setEnabled(false);
-        tabStrip.getChildAt(2).setClickable(false);
-
         walking = false;
 
         // Todo lo de guardar rikolinamente en la base de datos
 
+        HikeRequest hike = hikeFragment.getHike();
+        insertHike(hike);
+
         hikeFragment.resetHike();
-        Log.wtf("encodeCaca",HikeMapFragment.encodePath());
+    }
+
+    public void insertHike(HikeRequest hike){
+        Retrofit retrofit = APIClient.getClient();
+        UserAPI apiService = retrofit.create(UserAPI.class);
+        final LoginResponse hikeResponse = new LoginResponse();
+        Call<LoginResponse> result = apiService.addHike(hike);
+
+        result.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                hikeResponse.setMessage(response.body().getMessage());
+                hikeResponse.setSuccess(response.body().isSuccess());
+                Log.wtf("CACA", hikeResponse.getMessage());
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                hikeResponse.setMessage("Something went wrong.");
+                hikeResponse.setSuccess(false);
+            }
+        });
+
     }
 
     @Override

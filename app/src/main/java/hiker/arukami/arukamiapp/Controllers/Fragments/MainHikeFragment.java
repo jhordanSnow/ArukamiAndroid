@@ -1,4 +1,4 @@
-package hiker.arukami.arukamiapp;
+package hiker.arukami.arukamiapp.Controllers.Fragments;
 
 
 import android.os.AsyncTask;
@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import hiker.arukami.arukamiapp.API.APIClient;
-import hiker.arukami.arukamiapp.API.UserAPI;
+import hiker.arukami.arukamiapp.API.AruKamiAPI;
+import hiker.arukami.arukamiapp.Controllers.Activities.MainActivity;
 import hiker.arukami.arukamiapp.Models.HikePointRequest;
 import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
+import hiker.arukami.arukamiapp.R;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -56,19 +58,20 @@ public class MainHikeFragment extends Fragment {
         hikeMap = new HikeMapFragment();
     }
 
-    public HikeRequest getHike() {
+    public HikeRequest getHike(){
+        hike = hikeGeneral.getHike();
+        return hike;
+    }
+
+    public HikeRequest getHikePoints() {
         InsertPointCall pointTask = new InsertPointCall();
         try {
             pointTask.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         hike.setRoute(hikeMap.encodePath());
         return hike;
-
     }
 
     @Override
@@ -130,6 +133,10 @@ public class MainHikeFragment extends Fragment {
         // tabStrip.getChildAt(2).setClickable(false);
         return inflatedView;
 
+    }
+
+    public void changeTab(int position){
+        mViewPager.setCurrentItem(position);
     }
 
     public void showLayout() {
@@ -194,7 +201,7 @@ public class MainHikeFragment extends Fragment {
         @Override
         protected HikeRequest doInBackground(Call... params) {
             Retrofit retrofit = APIClient.getClient();
-            UserAPI apiService = retrofit.create(UserAPI.class);
+            AruKamiAPI apiService = retrofit.create(AruKamiAPI.class);
             HikePointRespond startPointResponse = new HikePointRespond();
             HikePointRespond endPointResponse  = new HikePointRespond();
             Call<HikePointRespond> startPointResult = apiService.addGeoPoint(startPoint);

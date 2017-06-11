@@ -9,7 +9,7 @@
     android:animateLayoutChanges="true"
     android:fitsSystemWindows="true"
     app:layout_collapseParallaxMultiplier="1.0"
-    tools:context="hiker.arukami.arukamiapp.MainActivity">
+    tools:context="hiker.arukami.arukamiapp.Controllers.Activities.MainActivity">
 
     <FrameLayout
         android:id="@+id/contentLayout"

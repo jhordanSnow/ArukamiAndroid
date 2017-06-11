@@ -1,9 +1,12 @@
 package hiker.arukami.arukamiapp.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class HikeRequest {
+public class HikeRequest implements Parcelable {
 
     @SerializedName("Name")
     @Expose
@@ -23,6 +26,7 @@ public class HikeRequest {
     @SerializedName("District")
     @Expose
     private int district;
+
     @SerializedName("QualityLevel")
     @Expose
     private int qualityLevel;
@@ -138,6 +142,56 @@ public class HikeRequest {
         this.endPoint = endPoint;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.startDate);
+        dest.writeString(this.endDate);
+        dest.writeString(this.route);
+        dest.writeString(this.photo);
+        dest.writeInt(this.district);
+        dest.writeInt(this.qualityLevel);
+        dest.writeInt(this.priceLevel);
+        dest.writeInt(this.difficulty);
+        dest.writeInt(this.hikeType);
+        dest.writeInt(this.startPoint);
+        dest.writeInt(this.endPoint);
+    }
+
+    public HikeRequest() {
+    }
+
+    protected HikeRequest(Parcel in) {
+        this.name = in.readString();
+        this.startDate = in.readString();
+        this.endDate = in.readString();
+        this.route = in.readString();
+        this.photo = in.readString();
+        this.district = in.readInt();
+        this.qualityLevel = in.readInt();
+        this.priceLevel = in.readInt();
+        this.difficulty = in.readInt();
+        this.hikeType = in.readInt();
+        this.startPoint = in.readInt();
+        this.endPoint = in.readInt();
+    }
+
+    public static final Parcelable.Creator<HikeRequest> CREATOR = new Parcelable.Creator<HikeRequest>() {
+        @Override
+        public HikeRequest createFromParcel(Parcel source) {
+            return new HikeRequest(source);
+        }
+
+        @Override
+        public HikeRequest[] newArray(int size) {
+            return new HikeRequest[size];
+        }
+    };
 }
 
 

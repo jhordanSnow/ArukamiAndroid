@@ -1,4 +1,4 @@
-package hiker.arukami.arukamiapp;
+package hiker.arukami.arukamiapp.Controllers.Activities;
 
 
 import android.app.DatePickerDialog;
@@ -26,12 +26,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import hiker.arukami.arukamiapp.API.APIClient;
-import hiker.arukami.arukamiapp.API.UserAPI;
+import hiker.arukami.arukamiapp.API.AruKamiAPI;
 import hiker.arukami.arukamiapp.Models.JsonResponse;
 import hiker.arukami.arukamiapp.Models.SignUpRequest;
 import hiker.arukami.arukamiapp.Models.SpinnerResponse;
+import hiker.arukami.arukamiapp.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,33 +43,33 @@ public class SignUpActivity extends AppCompatActivity {
     private static TextView mEdit;
     private static String SQLBirthDate;
 
-    @InjectView(R.id.input_username)
+    @BindView(R.id.input_username)
     EditText _usernameText;
-    @InjectView(R.id.input_password)
+    @BindView(R.id.input_password)
     EditText _passwordText;
-    @InjectView(R.id.input_idCard)
+    @BindView(R.id.input_idCard)
     EditText _idText;
-    @InjectView(R.id.input_accountNumber)
+    @BindView(R.id.input_accountNumber)
     EditText _accountNumberText;
-    @InjectView(R.id.input_firstName)
+    @BindView(R.id.input_firstName)
     EditText _nameText;
-    @InjectView(R.id.input_middleName)
+    @BindView(R.id.input_middleName)
     EditText _middleText;
-    @InjectView(R.id.input_lastName)
+    @BindView(R.id.input_lastName)
     EditText _lastText;
-    @InjectView(R.id.input_secondlastName)
+    @BindView(R.id.input_secondlastName)
     EditText _secondLastNameText;
-    @InjectView(R.id.gender_spinner)
+    @BindView(R.id.gender_spinner)
     Spinner _genderSpinner;
-    @InjectView(R.id.input_dateText)
+    @BindView(R.id.input_dateText)
     TextView _dateText;
-    @InjectView(R.id.nationality_spinner)
+    @BindView(R.id.nationality_spinner)
     Spinner _nationality_spinner;
 
 
-    @InjectView(R.id.btn_signup)
+    @BindView(R.id.btn_signup)
     Button _signupButton;
-    @InjectView(R.id.link_login)
+    @BindView(R.id.link_login)
     TextView _loginLink;
 
     public List<SpinnerResponse> items;
@@ -78,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.genders_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -93,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Spinner de las nacionalidades
         items = new ArrayList<>();
         Retrofit retrofit = APIClient.getClient();
-        UserAPI apiService = retrofit.create(UserAPI.class);
+        AruKamiAPI apiService = retrofit.create(AruKamiAPI.class);
         Call<List<SpinnerResponse>> result = apiService.getNationalities();
         result.enqueue(new Callback<List<SpinnerResponse>>() {
             @Override
@@ -155,7 +156,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         SignUpRequest user = new SignUpRequest(idCard, accountNumber, username, password, gender, SQLBirthDate, nationality, firstName, middleName, lastName, secondLastName);
         Retrofit retrofit = APIClient.getClient();
-        UserAPI apiService = retrofit.create(UserAPI.class);
+        AruKamiAPI apiService = retrofit.create(AruKamiAPI.class);
         final JsonResponse registerResponse = new JsonResponse();
         Call<JsonResponse> result = apiService.signUp(user);
 

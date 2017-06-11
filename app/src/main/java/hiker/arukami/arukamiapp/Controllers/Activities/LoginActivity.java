@@ -1,4 +1,4 @@
-package hiker.arukami.arukamiapp;
+package hiker.arukami.arukamiapp.Controllers.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7,11 +7,13 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -24,16 +26,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import hiker.arukami.arukamiapp.API.APIClient;
-import hiker.arukami.arukamiapp.API.UserAPI;
+import hiker.arukami.arukamiapp.API.AruKamiAPI;
 import hiker.arukami.arukamiapp.Models.LoginRequest;
 import hiker.arukami.arukamiapp.Models.LoginResponse;
+import hiker.arukami.arukamiapp.R;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -265,7 +267,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             Retrofit retrofit = APIClient.getClient();
-            UserAPI service = retrofit.create(UserAPI.class);
+            AruKamiAPI service = retrofit.create(AruKamiAPI.class);
 
             Call<LoginResponse> call = service.login(new LoginRequest(mEmail, mPassword));
             LoginResponse response = new LoginResponse();
@@ -287,8 +289,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            // TODO: register the new account here.
-            if (response.isSuccess()){
+            if (response != null && response.isSuccess()){
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                prefs.edit().putBoolean("Islogin", true).putInt("IdCard",response.getIdCard()).commit();
                 return true;
             }
             return false;

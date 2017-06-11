@@ -19,7 +19,7 @@ import retrofit2.http.POST;
  * Created by Jhordan on 21/5/2017.
  */
 
-public interface UserAPI {
+public interface AruKamiAPI {
 
     @POST("Login/Authenticate/")
     Call<LoginResponse> login(@Body LoginRequest user);

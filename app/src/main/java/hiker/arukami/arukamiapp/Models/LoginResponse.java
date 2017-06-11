@@ -13,6 +13,10 @@ public class LoginResponse {
     @Expose
     private String message;
 
+    @SerializedName("IdCard")
+    @Expose
+    private int idCard;
+
     public boolean isSuccess() {
         return success;
     }
@@ -27,6 +31,14 @@ public class LoginResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(int idCard) {
+        this.idCard = idCard;
     }
 
 }

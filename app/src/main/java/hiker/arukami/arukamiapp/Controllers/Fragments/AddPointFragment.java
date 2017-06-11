@@ -1,4 +1,4 @@
-package hiker.arukami.arukamiapp;
+package hiker.arukami.arukamiapp.Controllers.Fragments;
 
 
 import android.Manifest;
@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import com.github.florent37.camerafragment.CameraFragment;
 import com.github.florent37.camerafragment.configuration.Configuration;
 import com.github.florent37.camerafragment.widgets.RecordButton;
+
+import hiker.arukami.arukamiapp.R;
 
 
 /**

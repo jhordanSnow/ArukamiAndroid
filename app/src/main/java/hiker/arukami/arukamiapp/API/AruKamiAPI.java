@@ -10,10 +10,12 @@ import hiker.arukami.arukamiapp.Models.LoginRequest;
 import hiker.arukami.arukamiapp.Models.LoginResponse;
 import hiker.arukami.arukamiapp.Models.SignUpRequest;
 import hiker.arukami.arukamiapp.Models.SpinnerResponse;
+import hiker.arukami.arukamiapp.Models.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Created by Jhordan on 21/5/2017.
@@ -26,6 +28,9 @@ public interface AruKamiAPI {
 
     @POST("Register/User")
     Call<JsonResponse> signUp(@Body SignUpRequest user);
+
+    @GET("User/{idCard}/")
+    Call<User> getUserDetails(@Path("idCard") int idCard);
 
     @GET("Catalog/Nationalities")
     Call<List<SpinnerResponse>> getNationalities();

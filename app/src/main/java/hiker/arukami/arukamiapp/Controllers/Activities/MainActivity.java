@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
@@ -32,10 +33,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
+
     public MainHikeFragment hikeFragment = MainHikeFragment.getInstance();
-    public ProfileFragment profileFragment = ProfileFragment.getInstance();
+    public ProfileFragment profileFragment;
     public static boolean walking = false;
     private static TabLayout tabLayout;
+
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -212,7 +215,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadUser(int idCard){
+        Toast.makeText(this, String.valueOf(idCard), Toast.LENGTH_SHORT).show();
+        profileFragment = ProfileFragment.getInstance(idCard);
+    }
 
+    public void SignOut(){
+        SharedPreferences mySPrefs =PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mySPrefs.edit();
+        editor.remove("IdCard").remove("Islogin");
+        editor.apply();
+        getSupportFragmentManager().beginTransaction().remove(profileFragment).commit();
+        getSupportFragmentManager().beginTransaction().remove(hikeFragment).commit();
+
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

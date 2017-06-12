@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,22 +25,24 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyASEdLL4-lqifDHDZgOjYgUDPKZOoKrKzQ" />
 
-        <activity android:name=".Controllers.Activities.LoginActivity"/>
+        <activity android:name=".Controllers.Activities.LoginActivity" />
         <activity android:name=".Controllers.Activities.SignUpActivity" />
-
         <activity
             android:name=".Controllers.Activities.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Controllers.Activities.SubmitHikeActivity"
             android:label="@string/title_activity_submit_hike"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Controllers.SettingsActivity"
+            android:label="@string/title_activity_settings" />
     </application>
 
 </manifest>

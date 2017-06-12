@@ -120,6 +120,7 @@ public class HikeFragment extends android.support.v4.app.Fragment {
             photo.compress(Bitmap.CompressFormat.PNG, 100, bos);
             byte[] bArray = bos.toByteArray();
             mCurrentPhotoPath = Base64.encodeToString(bArray, Base64.DEFAULT);
+
             imageView.setImageBitmap(photo);
         }
     }

@@ -1,7 +1,10 @@
 package hiker.arukami.arukamiapp.Controllers.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -10,13 +13,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import hiker.arukami.arukamiapp.API.APIClient;
 import hiker.arukami.arukamiapp.API.AruKamiAPI;
@@ -24,8 +33,11 @@ import hiker.arukami.arukamiapp.Controllers.Fragments.HikeFragment;
 import hiker.arukami.arukamiapp.Controllers.Fragments.MainHikeFragment;
 import hiker.arukami.arukamiapp.Controllers.Fragments.ProfileFragment;
 import hiker.arukami.arukamiapp.Helpers.BottomNavigationViewHelper;
+import hiker.arukami.arukamiapp.Models.HikePointRequest;
+import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
 import hiker.arukami.arukamiapp.Models.LoginResponse;
+import hiker.arukami.arukamiapp.Models.PointModel;
 import hiker.arukami.arukamiapp.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,12 +46,19 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    public MainHikeFragment hikeFragment = MainHikeFragment.getInstance();
+    public MainHikeFragment hikeFragment;
     public ProfileFragment profileFragment;
     public static boolean walking = false;
     private static TabLayout tabLayout;
+    private static MainActivity instance;
 
 
+    public static MainActivity getInstance() {
+        if (instance == null) {
+            instance = new MainActivity();
+        }
+        return instance;
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -78,12 +97,14 @@ public class MainActivity extends AppCompatActivity {
     public void showButton(){
         if (walking){
             findViewById(R.id.EndHikeButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.addPointButton).setVisibility(View.VISIBLE);
         }else{
             findViewById(R.id.StartHikeButton).setVisibility(View.VISIBLE);
         }
     }
 
     public void hideButtons(){
+        findViewById(R.id.addPointButton).setVisibility(View.GONE);
         findViewById(R.id.StartHikeButton).setVisibility(View.GONE);
         findViewById(R.id.EndHikeButton).setVisibility(View.GONE);
     }
@@ -113,9 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.StartHikeButton).setVisibility(View.GONE);
         findViewById(R.id.EndHikeButton).setVisibility(View.VISIBLE);
-//
-//        LinearLayout tabStrip = ((LinearLayout)((TabLayout) findViewById(R.id.tabLayout)).getChildAt(0));
-//        tabStrip.getChildAt(2).setClickable(true);
+        findViewById(R.id.addPointButton).setVisibility(View.VISIBLE);
         walking = true;
     }
 
@@ -133,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.StartHikeButton).setVisibility(View.VISIBLE);
         findViewById(R.id.EndHikeButton).setVisibility(View.GONE);
+        findViewById(R.id.addPointButton).setVisibility(View.GONE);
         //LinearLayout tabStrip = ((LinearLayout)((TabLayout) findViewById(R.id.tabLayout)).getChildAt(0));
         walking = false;
 
@@ -146,35 +166,13 @@ public class MainActivity extends AppCompatActivity {
         //hikeFragment.resetHike();
     }
 
-    public void insertHike(HikeRequest hike){
-
-        Retrofit retrofit = APIClient.getClient();
-        AruKamiAPI apiService = retrofit.create(AruKamiAPI.class);
-        final LoginResponse hikeResponse = new LoginResponse();
-        Call<LoginResponse> result = apiService.addHike(hike);
-
-        result.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                hikeResponse.setMessage(response.body().getMessage());
-                hikeResponse.setSuccess(response.body().isSuccess());
-                Log.wtf("CACA", hikeResponse.getMessage());
-
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                hikeResponse.setMessage("Something went wrong.");
-                hikeResponse.setSuccess(false);
-            }
-        });
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        hikeFragment = MainHikeFragment.getInstance();
 
         SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean logged = app_preferences.getBoolean("Islogin",false);
@@ -193,29 +191,48 @@ public class MainActivity extends AppCompatActivity {
                 startHike();
             }
         });
-
         final BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-
         FloatingActionButton endHike = (FloatingActionButton) findViewById(R.id.EndHikeButton);
         endHike.setVisibility(View.GONE);
         endHike.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 submitHike();
-
-
             }
         });
-        findViewById(R.id.EndHikeButton).setVisibility(View.GONE);
-
-
+        hideButtons();
         BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
     }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_hike_fragment);
+//        fragment.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+//            Bitmap photo = (Bitmap) data.getExtras().get("data");
+//            Intent intent = new Intent(MainActivity.this, AddPointActivity.class);
+//            intent.putExtra("Image",(Bitmap) data.getExtras().get("data"));
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            photo.compress(Bitmap.CompressFormat.PNG, 100, bos);
+//            byte[] bArray = bos.toByteArray();
+//            String photoString = Base64.encodeToString(bArray, Base64.DEFAULT);
+//            SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//            LatLng geoPoint = hikeFragment.getLastPoint();
+//            PointModel model = new PointModel();
+//            model.setDate(getDateTime());
+//            model.setPhoto(photoString);
+//            model.setLatitude(String.valueOf(geoPoint.latitude));
+//            model.setLongitude(String.valueOf(geoPoint.longitude));
+//            model.setIdCard(app_preferences.getInt("IdCard",0));
+//
+//            intent.putExtra("Model", model);
+//
+//            startActivity(intent);
+//            //imageView.setImageBitmap(photo);
+//        }
+//    }
 
     public void loadUser(int idCard){
-        Toast.makeText(this, String.valueOf(idCard), Toast.LENGTH_SHORT).show();
         profileFragment = ProfileFragment.getInstance(idCard);
     }
 
@@ -231,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 
 }
 

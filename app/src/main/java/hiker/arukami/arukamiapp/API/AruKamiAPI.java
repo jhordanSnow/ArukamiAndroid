@@ -5,9 +5,11 @@ import java.util.List;
 import hiker.arukami.arukamiapp.Models.HikePointRequest;
 import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
+import hiker.arukami.arukamiapp.Models.HikeResponse;
 import hiker.arukami.arukamiapp.Models.JsonResponse;
 import hiker.arukami.arukamiapp.Models.LoginRequest;
 import hiker.arukami.arukamiapp.Models.LoginResponse;
+import hiker.arukami.arukamiapp.Models.PointModel;
 import hiker.arukami.arukamiapp.Models.SignUpRequest;
 import hiker.arukami.arukamiapp.Models.SpinnerResponse;
 import hiker.arukami.arukamiapp.Models.User;
@@ -54,5 +56,8 @@ public interface AruKamiAPI {
     Call<HikePointRespond> addGeoPoint(@Body HikePointRequest point);
 
     @POST("Hikes/New/")
-    Call<LoginResponse> addHike(@Body HikeRequest hike);
+    Call<HikeResponse> addHike(@Body HikeRequest hike);
+
+    @POST("Hikes/{id}/AddPoints")
+    Call<LoginResponse> addHikePoint(@Path("id") int idCard, @Body PointModel detailPoint);
 }

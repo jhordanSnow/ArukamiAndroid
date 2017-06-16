@@ -7,7 +7,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class HikeRequest implements Parcelable {
-
     @SerializedName("Name")
     @Expose
     private String name;
@@ -23,10 +22,15 @@ public class HikeRequest implements Parcelable {
     @SerializedName("Photo")
     @Expose
     private String photo;
+    @SerializedName("Description")
+    @Expose
+    private String description;
+    @SerializedName("IdCard")
+    @Expose
+    private int idCard;
     @SerializedName("District")
     @Expose
     private int district;
-
     @SerializedName("QualityLevel")
     @Expose
     private int qualityLevel;
@@ -84,6 +88,22 @@ public class HikeRequest implements Parcelable {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(int idCard) {
+        this.idCard = idCard;
     }
 
     public int getDistrict() {
@@ -154,6 +174,8 @@ public class HikeRequest implements Parcelable {
         dest.writeString(this.endDate);
         dest.writeString(this.route);
         dest.writeString(this.photo);
+        dest.writeString(this.description);
+        dest.writeInt(this.idCard);
         dest.writeInt(this.district);
         dest.writeInt(this.qualityLevel);
         dest.writeInt(this.priceLevel);
@@ -172,6 +194,8 @@ public class HikeRequest implements Parcelable {
         this.endDate = in.readString();
         this.route = in.readString();
         this.photo = in.readString();
+        this.description = in.readString();
+        this.idCard = in.readInt();
         this.district = in.readInt();
         this.qualityLevel = in.readInt();
         this.priceLevel = in.readInt();

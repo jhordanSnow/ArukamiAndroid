@@ -1,6 +1,7 @@
 package hiker.arukami.arukamiapp.Controllers.Fragments;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import hiker.arukami.arukamiapp.API.APIClient;
@@ -25,6 +27,7 @@ import hiker.arukami.arukamiapp.Controllers.Activities.MainActivity;
 import hiker.arukami.arukamiapp.Models.HikePointRequest;
 import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
+import hiker.arukami.arukamiapp.Models.PointModel;
 import hiker.arukami.arukamiapp.R;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -41,12 +44,34 @@ public class MainHikeFragment extends Fragment {
     private HikeFragment hikeGeneral;
     private HikeMapFragment hikeMap;
     private HikeRequest hike;
+    private ArrayList<PointModel> hikePoints;
 
     public static MainHikeFragment getInstance() {
         if (instance == null) {
             instance = new MainHikeFragment();
         }
         return instance;
+    }
+
+
+    public void reload(){
+        getActivity().recreate();
+        Intent intent = getActivity().getIntent();
+        getActivity().finish();
+        startActivity(intent);
+    }
+
+    public ArrayList<PointModel> getHikeSelectedPoints(){
+        return hikePoints;
+    }
+
+    public void addPoint(PointModel model){
+        hikePoints.add(model);
+    }
+
+    public LatLng getLastPoint(){
+        ArrayList<LatLng> hikePoints = hikeMap.getPoints();
+        return hikePoints.get(hikePoints.size() - 1);
     }
 
     public void resetHike() {
@@ -80,6 +105,7 @@ public class MainHikeFragment extends Fragment {
 
         hikeGeneral = new HikeFragment();
         hikeMap = new HikeMapFragment();
+        hikePoints = new ArrayList<>();
 
         View inflatedView = inflater.inflate(R.layout.fragment_likes, container, false);
         mViewPager = (ViewPager) inflatedView.findViewById(R.id.viewpager);
@@ -101,9 +127,6 @@ public class MainHikeFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 showLayout();
-                if (position == 2) {
-                    hideLayout();
-                }
                 mViewPager.setCurrentItem(position);
             }
 
@@ -120,17 +143,9 @@ public class MainHikeFragment extends Fragment {
 
         tabLayout.addTab(tabLayout.newTab().setText("General"));
         tabLayout.addTab(tabLayout.newTab().setText("Map"));
-
-        View view1 = getActivity().getLayoutInflater().inflate(R.layout.side, null);
-        tabLayout.addTab(tabLayout.newTab().setCustomView(view1));
-
         mViewPager.setAdapter(new PagerAdapter
                 (getFragmentManager(), tabLayout.getTabCount()));
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
-        LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
-        // tabStrip.getChildAt(2).setClickable(false);
         return inflatedView;
 
     }
@@ -167,9 +182,6 @@ public class MainHikeFragment extends Fragment {
                     return hikeGeneral;
                 case 1:
                     return hikeMap;
-                case 2:
-
-                    return new AddPointFragment();
                 default:
                     return null;
             }

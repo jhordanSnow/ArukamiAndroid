@@ -43,6 +43,7 @@
         <activity
             android:name=".Controllers.SettingsActivity"
             android:label="@string/title_activity_settings" />
+        <activity android:name=".Controllers.Activities.AddPointActivity"></activity>
     </application>
 
 </manifest>

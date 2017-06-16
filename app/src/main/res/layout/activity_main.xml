@@ -45,6 +45,20 @@
             app:fabSize="normal"
             app:srcCompat="@drawable/ic_hike" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addPointButton"
+            app:backgroundTint="@android:color/holo_blue_dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="75dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_camera_black_24dp" />
+
     </FrameLayout>
 
 

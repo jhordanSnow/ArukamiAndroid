@@ -54,7 +54,9 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.profile_bk)
     ImageView _profilePhoto;
 
-
+    public static Integer getUserId(){
+        return USER_ID;
+    }
 
     public static ProfileFragment getInstance(int id) {
         if (instance == null) {

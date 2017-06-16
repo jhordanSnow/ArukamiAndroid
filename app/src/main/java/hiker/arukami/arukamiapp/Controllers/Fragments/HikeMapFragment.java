@@ -99,8 +99,8 @@ public class HikeMapFragment extends Fragment implements LocationListener {
     public void onLocationChanged(Location location) {
 
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(current, 16);
-        googleMap.animateCamera(update);
+        //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(current, 16);
+        //googleMap.animateCamera(update);
 
         if (MainActivity.getWalking()) {
             if (prev != null) {

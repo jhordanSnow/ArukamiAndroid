@@ -2,6 +2,9 @@ package hiker.arukami.arukamiapp.API;
 
 import java.util.List;
 
+import hiker.arukami.arukamiapp.Models.BoolModel;
+import hiker.arukami.arukamiapp.Models.GetPointsResponse;
+import hiker.arukami.arukamiapp.Models.HikeModel;
 import hiker.arukami.arukamiapp.Models.HikePointRequest;
 import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
@@ -15,7 +18,10 @@ import hiker.arukami.arukamiapp.Models.SpinnerResponse;
 import hiker.arukami.arukamiapp.Models.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -60,4 +66,37 @@ public interface AruKamiAPI {
 
     @POST("Hikes/{id}/AddPoints")
     Call<LoginResponse> addHikePoint(@Path("id") int idCard, @Body PointModel detailPoint);
+
+    @GET("User/{id}/Hikes/")
+    Call<List<HikeModel>> getHikes(@Path("id") int idCard);
+
+    @GET("User/{id}/Wall/")
+    Call<List<HikeModel>> getWall(@Path("id") int idCard);
+
+    @GET("User/Follow/{id}/{idUser}")
+    Call<BoolModel> isFollowing(@Path("id") int idCard, @Path("idUser") int idFriend);
+
+    @FormUrlEncoded
+    @POST("User/Follow/")
+    Call<JsonResponse> followUnfollow(@Field("IdCard") int IdCard, @Field("IdFriend") int IdFriend);
+
+    @GET("User/Search/{Username}")
+    Call<List<User>> SearchUser(@Path("Username") String username);
+
+    @GET("Hikes/Like/{id}/{idUser}")
+    Call<BoolModel> isLiking(@Path("id") int idCard, @Path("idUser") int idFriend);
+
+    @FormUrlEncoded
+    @POST("Hikes/Like/")
+    Call<JsonResponse> likeUnlike(@Field("IdCard") int IdCard, @Field("IdHike") int IdHike);
+
+    @FormUrlEncoded
+    @POST("User/Donate/")
+    Call<JsonResponse> donate(@Field("IdCard") int IdCard, @Field("Ammount") double Ammount);
+
+    @GET("Hikes/Points/{id}")
+    Call<List<GetPointsResponse>> getPoints(@Path("id") int IdCard);
+
+    @GET("Photo")
+    Call<Void> getPhoto(@Header("Path") String path);
 }

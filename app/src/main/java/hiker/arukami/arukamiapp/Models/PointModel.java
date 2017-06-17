@@ -1,17 +1,11 @@
 package hiker.arukami.arukamiapp.Models;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
-/**
- * Created by Jhordan on 15/6/2017.
- */
 
 public class PointModel implements Parcelable {
     @SerializedName("Latitude")
@@ -133,3 +127,5 @@ public class PointModel implements Parcelable {
         }
     };
 }
+
+

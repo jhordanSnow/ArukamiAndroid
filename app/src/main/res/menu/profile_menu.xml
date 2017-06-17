@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_donate"
+        android:title="@string/action_donate"
         android:orderInCategory="1"
         app:showAsAction="never" />
 
@@ -12,5 +12,13 @@
         android:title="@string/action_sign_out"
         android:orderInCategory="2"
         app:showAsAction="never" />
+
+    <item
+        android:title="@string/follow"
+        android:id="@+id/follow"
+        android:tint="@color/white"
+        android:icon="@drawable/ic_heart_outline_white_24dp"
+        app:showAsAction="ifRoom">
+    </item>
 
 </menu>

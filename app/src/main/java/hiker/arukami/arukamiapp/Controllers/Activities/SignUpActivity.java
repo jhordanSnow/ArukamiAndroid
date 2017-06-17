@@ -1,14 +1,17 @@
 package hiker.arukami.arukamiapp.Controllers.Activities;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +31,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
+import de.hdodenhof.circleimageview.CircleImageView;
 import hiker.arukami.arukamiapp.API.APIClient;
 import hiker.arukami.arukamiapp.API.AruKamiAPI;
 import hiker.arukami.arukamiapp.Models.JsonResponse;
@@ -65,7 +70,8 @@ public class SignUpActivity extends AppCompatActivity {
     TextView _dateText;
     @BindView(R.id.nationality_spinner)
     Spinner _nationality_spinner;
-
+    @BindView(R.id.sign_up_icon)
+    CircleImageView imageView;
 
     @BindView(R.id.btn_signup)
     Button _signupButton;
@@ -73,6 +79,9 @@ public class SignUpActivity extends AppCompatActivity {
     TextView _loginLink;
 
     public List<SpinnerResponse> items;
+    private static final int CAMERA_REQUEST = 1123;
+
+    String photo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,10 +116,18 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
-
+        photo = null;
         mEdit = (TextView) findViewById(R.id.input_dateText);
         mEdit.setClickable(false);
         SQLBirthDate = "";
+        imageView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                takePhoto(v,CAMERA_REQUEST);
+
+            }
+        });
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +171,7 @@ public class SignUpActivity extends AppCompatActivity {
         String gender = _genderSpinner.getSelectedItem().toString().equals("Male") ? "M" : "F";
         int nationality = ((SpinnerResponse) _nationality_spinner.getSelectedItem()).getValue();
 
-        SignUpRequest user = new SignUpRequest(idCard, accountNumber, username, password, gender, SQLBirthDate, nationality, firstName, middleName, lastName, secondLastName);
+        SignUpRequest user = new SignUpRequest(idCard, accountNumber, username, password, gender, SQLBirthDate, nationality, firstName, middleName, lastName, secondLastName,photo);
         Retrofit retrofit = APIClient.getClient();
         AruKamiAPI apiService = retrofit.create(AruKamiAPI.class);
         final JsonResponse registerResponse = new JsonResponse();
@@ -311,6 +328,25 @@ public class SignUpActivity extends AppCompatActivity {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             populateSetDate(year, month, day);
+        }
+    }
+
+    public void takePhoto(View view, int CAMERA_EVENT) {
+        Log.wtf("imageview","cacaentra");
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_EVENT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.wtf("imageview","caca");
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            imageView.setImageBitmap(image);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            byte[] bArray = bos.toByteArray();
+            photo = Base64.encodeToString(bArray, Base64.DEFAULT);
         }
     }
 

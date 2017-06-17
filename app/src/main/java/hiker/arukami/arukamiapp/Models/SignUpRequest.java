@@ -39,7 +39,11 @@ public class SignUpRequest {
     @Expose
     private String secondLastName;
 
-    public SignUpRequest(float idCard, float accountNumber, String username, String password, String gender, String birthDate, int nationality, String firstName, String middleName, String lastName, String secondLastName){
+    @SerializedName("PhotoURL")
+    @Expose
+    private String photo;
+
+    public SignUpRequest(float idCard, float accountNumber, String username, String password, String gender, String birthDate, int nationality, String firstName, String middleName, String lastName, String secondLastName, String photo){
         this.idCard = idCard;
         this.accountNumber = accountNumber;
         this.username = username;
@@ -51,6 +55,7 @@ public class SignUpRequest {
         this.middleName = middleName;
         this.lastName = lastName;
         this.secondLastName = secondLastName;
+        this.photo = photo;
 
     }
 
@@ -143,7 +148,13 @@ public class SignUpRequest {
     }
 
 
+    public String getPhoto() {
+        return photo;
+    }
 
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }
 
 

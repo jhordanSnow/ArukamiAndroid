@@ -1,7 +1,6 @@
 package hiker.arukami.arukamiapp.Controllers.Activities;
 
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,23 +8,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import hiker.arukami.arukamiapp.API.APIClient;
-import hiker.arukami.arukamiapp.API.AruKamiAPI;
 import hiker.arukami.arukamiapp.Controllers.Fragments.MainHikeFragment;
-import hiker.arukami.arukamiapp.Models.HikePointRequest;
-import hiker.arukami.arukamiapp.Models.HikePointRespond;
-import hiker.arukami.arukamiapp.Models.HikeRequest;
 import hiker.arukami.arukamiapp.Models.PointModel;
 import hiker.arukami.arukamiapp.R;
-import retrofit2.Call;
-import retrofit2.Retrofit;
 
 public class AddPointActivity extends AppCompatActivity {
     @BindView(R.id.point_bk)

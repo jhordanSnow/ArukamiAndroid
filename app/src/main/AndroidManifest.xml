@@ -27,23 +27,29 @@
 
         <activity android:name=".Controllers.Activities.LoginActivity" />
         <activity android:name=".Controllers.Activities.SignUpActivity" />
-        <activity
-            android:name=".Controllers.Activities.MainActivity"
-            android:label="@string/title_activity_main">
+        <activity android:name=".Controllers.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Controllers.Activities.SubmitHikeActivity"
             android:label="@string/title_activity_submit_hike"
             android:theme="@style/AppTheme" />
+        <activity android:name=".Controllers.Activities.AddPointActivity" />
+        <activity android:name=".Controllers.Activities.MyHikesActivity" />
+        <activity android:name=".Controllers.Activities.ProfileActivity" />
         <activity
-            android:name=".Controllers.SettingsActivity"
-            android:label="@string/title_activity_settings" />
-        <activity android:name=".Controllers.Activities.AddPointActivity"></activity>
+            android:name=".Controllers.Activities.DonationActivity"
+            android:label="@string/title_activity_donation"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Controllers.Activities.HikeDetailsActivity" android:noHistory = "true"></activity>
     </application>
 
 </manifest>

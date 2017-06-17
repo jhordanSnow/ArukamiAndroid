@@ -23,11 +23,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 
-import butterknife.BindView;
 import hiker.arukami.arukamiapp.API.APIClient;
 import hiker.arukami.arukamiapp.API.AruKamiAPI;
 import hiker.arukami.arukamiapp.Controllers.Activities.AddPointActivity;
@@ -63,7 +60,7 @@ public class HikeFragment extends android.support.v4.app.Fragment {
         rootView = inflater.inflate(R.layout.fragment_hike, container, false);
         _district_spinner = (Spinner) rootView.findViewById(R.id.spinner_district);
 
-        imageView = (ImageView) rootView.findViewById(R.id.imageView);
+
         _text_hike_name = (EditText) rootView.findViewById(R.id.input_hikeName);
 
         addPoint = (FloatingActionButton) getActivity().findViewById(R.id.addPointButton);
@@ -78,6 +75,7 @@ public class HikeFragment extends android.support.v4.app.Fragment {
         });
 
         initSpinners();
+        imageView = (ImageView) rootView.findViewById(R.id.imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -64,7 +64,9 @@
                     android:text="@string/username"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
+
             </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"

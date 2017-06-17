@@ -1,6 +1,7 @@
 package hiker.arukami.arukamiapp.Controllers.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import hiker.arukami.arukamiapp.API.APIClient;
 import hiker.arukami.arukamiapp.API.AruKamiAPI;
+import hiker.arukami.arukamiapp.Controllers.Activities.DonationActivity;
 import hiker.arukami.arukamiapp.Controllers.Activities.MainActivity;
+import hiker.arukami.arukamiapp.Controllers.Activities.MyHikesActivity;
 import hiker.arukami.arukamiapp.Models.User;
 import hiker.arukami.arukamiapp.R;
 import retrofit2.Call;
@@ -53,6 +56,8 @@ public class ProfileFragment extends Fragment {
     TextView _accountNumberText;
     @BindView(R.id.profile_bk)
     ImageView _profilePhoto;
+    @BindView(R.id.fab)
+    ImageView _myHikesButton;
 
     public static Integer getUserId(){
         return USER_ID;
@@ -65,8 +70,6 @@ public class ProfileFragment extends Fragment {
         }
         return instance;
     }
-
-
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -81,6 +84,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 fillUserDetails(response.body());
+
             }
 
             @Override
@@ -113,9 +117,19 @@ public class ProfileFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this,rootView);
         myToolbar = (Toolbar) rootView.findViewById(R.id.profile_toolbar);
+
         if (USER_ID != null) {
             getUserDetails();
         }
+        _myHikesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MyHikesActivity.class);
+                intent.putExtra("USER_ID",USER_ID);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 
@@ -135,6 +149,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.profile_menu, menu);
+        menu.findItem(R.id.follow).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -145,15 +160,13 @@ public class ProfileFragment extends Fragment {
                 ((MainActivity)getActivity()).SignOut();
                 break;
             }
-            case R.id.action_settings: {
-
+            case R.id.action_donate: {
+                Intent intent = new Intent(getContext(), DonationActivity.class);
+                startActivity(intent);
                 break;
             }
         }
         return false;
     }
-
-
-
 
 }

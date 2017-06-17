@@ -1,10 +1,8 @@
 package hiker.arukami.arukamiapp.Controllers.Activities;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,19 +12,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import hiker.arukami.arukamiapp.API.APIClient;
 import hiker.arukami.arukamiapp.API.AruKamiAPI;
-import hiker.arukami.arukamiapp.Controllers.Fragments.HikeFragment;
 import hiker.arukami.arukamiapp.Controllers.Fragments.MainHikeFragment;
 import hiker.arukami.arukamiapp.Controllers.Fragments.ProfileFragment;
 import hiker.arukami.arukamiapp.Helpers.FillSpinner;
-import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
 import hiker.arukami.arukamiapp.Models.HikeResponse;
 import hiker.arukami.arukamiapp.Models.LoginResponse;
@@ -75,8 +68,6 @@ public class SubmitHikeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Uploading Hike...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 uploadHike();
             }
         });
@@ -89,19 +80,18 @@ public class SubmitHikeActivity extends AppCompatActivity {
 
 
     public void uploadHike(){
-        MainHikeFragment.getInstance().reload();
-//        myHike.setDifficulty(((SpinnerResponse) _difficulty_spinner.getSelectedItem()).getValue());
-//        myHike.setHikeType(((SpinnerResponse) _hike_type_spinner.getSelectedItem()).getValue());
-//        myHike.setQualityLevel(((SpinnerResponse) _quality_spinner.getSelectedItem()).getValue());
-//        myHike.setPriceLevel(((SpinnerResponse) _price_spinner.getSelectedItem()).getValue());
-//        MainHikeFragment frag = MainHikeFragment.getInstance();
-//        HikeRequest points = frag.getHikePoints();
-//        myHike.setStartPoint(points.getStartPoint());
-//        myHike.setEndPoint(points.getEndPoint());
-//        myHike.setRoute(points.getRoute());
-//        myHike.setDescription(_description_hike.getText().toString());
-//        myHike.setIdCard(ProfileFragment.getUserId());
-//        insertHike(myHike);
+        myHike.setDifficulty(((SpinnerResponse) _difficulty_spinner.getSelectedItem()).getValue());
+        myHike.setHikeType(((SpinnerResponse) _hike_type_spinner.getSelectedItem()).getValue());
+        myHike.setQualityLevel(((SpinnerResponse) _quality_spinner.getSelectedItem()).getValue());
+        myHike.setPriceLevel(((SpinnerResponse) _price_spinner.getSelectedItem()).getValue());
+        MainHikeFragment frag = MainHikeFragment.getInstance();
+        HikeRequest points = frag.getHikePoints();
+        myHike.setStartPoint(points.getStartPoint());
+        myHike.setEndPoint(points.getEndPoint());
+        myHike.setRoute(points.getRoute());
+        myHike.setDescription(_description_hike.getText().toString());
+        myHike.setIdCard(ProfileFragment.getUserId());
+        insertHike(myHike);
     }
 
     public void insertHike(HikeRequest hike){
@@ -109,7 +99,7 @@ public class SubmitHikeActivity extends AppCompatActivity {
         MainHikeFragment hikeFrag = MainHikeFragment.getInstance();
         Integer idPoint = null;
         try {
-           HikeResponse hikeResponse = result.execute().get();
+            HikeResponse hikeResponse = result.execute().get();
             idPoint = hikeResponse.getIdHike();
 
         } catch (InterruptedException | ExecutionException e) {
@@ -118,7 +108,7 @@ public class SubmitHikeActivity extends AppCompatActivity {
         Retrofit retrofit = APIClient.getClient();
         AruKamiAPI apiService = retrofit.create(AruKamiAPI.class);
         LoginResponse respuesta = new LoginResponse();
-        Log.wtf("caca",String.valueOf(idPoint));
+        Log.wtf("punto",String.valueOf(idPoint));
         if (idPoint!= null){
             for (PointModel point: hikeFrag.getHikeSelectedPoints()){
                 point.setIdHike(idPoint);

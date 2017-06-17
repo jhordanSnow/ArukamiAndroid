@@ -1,56 +1,38 @@
 package hiker.arukami.arukamiapp.Controllers.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
-import hiker.arukami.arukamiapp.API.APIClient;
-import hiker.arukami.arukamiapp.API.AruKamiAPI;
 import hiker.arukami.arukamiapp.Controllers.Fragments.HikeFragment;
 import hiker.arukami.arukamiapp.Controllers.Fragments.MainHikeFragment;
 import hiker.arukami.arukamiapp.Controllers.Fragments.ProfileFragment;
+import hiker.arukami.arukamiapp.Controllers.Fragments.SearchFragment;
+import hiker.arukami.arukamiapp.Controllers.Fragments.WallFragment;
 import hiker.arukami.arukamiapp.Helpers.BottomNavigationViewHelper;
-import hiker.arukami.arukamiapp.Models.HikePointRequest;
-import hiker.arukami.arukamiapp.Models.HikePointRespond;
 import hiker.arukami.arukamiapp.Models.HikeRequest;
-import hiker.arukami.arukamiapp.Models.LoginResponse;
-import hiker.arukami.arukamiapp.Models.PointModel;
 import hiker.arukami.arukamiapp.R;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     public MainHikeFragment hikeFragment;
     public ProfileFragment profileFragment;
+    public WallFragment wallFragment;
+    public SearchFragment searchFragment;
     public static boolean walking = false;
-    private static TabLayout tabLayout;
     private static MainActivity instance;
+
 
 
     public static MainActivity getInstance() {
@@ -69,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
             hideButtons();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.title_home);
+                    fragment = wallFragment;
                     break;
                 case R.id.navigation_search:
-                    //mTextMessage.setText(R.string.title_search);
+                    fragment = searchFragment;
                     break;
                 case R.id.navigation_hike:
                     showButton();
@@ -173,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         hikeFragment = MainHikeFragment.getInstance();
+        wallFragment = WallFragment.getInstance();
+        searchFragment = SearchFragment.getInstance();
 
         SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean logged = app_preferences.getBoolean("Islogin",false);
@@ -202,35 +186,7 @@ public class MainActivity extends AppCompatActivity {
         hideButtons();
         BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
     }
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_hike_fragment);
-//        fragment.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//            Intent intent = new Intent(MainActivity.this, AddPointActivity.class);
-//            intent.putExtra("Image",(Bitmap) data.getExtras().get("data"));
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            photo.compress(Bitmap.CompressFormat.PNG, 100, bos);
-//            byte[] bArray = bos.toByteArray();
-//            String photoString = Base64.encodeToString(bArray, Base64.DEFAULT);
-//            SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//            LatLng geoPoint = hikeFragment.getLastPoint();
-//            PointModel model = new PointModel();
-//            model.setDate(getDateTime());
-//            model.setPhoto(photoString);
-//            model.setLatitude(String.valueOf(geoPoint.latitude));
-//            model.setLongitude(String.valueOf(geoPoint.longitude));
-//            model.setIdCard(app_preferences.getInt("IdCard",0));
-//
-//            intent.putExtra("Model", model);
-//
-//            startActivity(intent);
-//            //imageView.setImageBitmap(photo);
-//        }
-//    }
 
     public void loadUser(int idCard){
         profileFragment = ProfileFragment.getInstance(idCard);
@@ -248,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
 
 }
 
